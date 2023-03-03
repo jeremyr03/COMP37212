@@ -8,11 +8,6 @@ import kernels
 SAVE_PATH = "./images/"
 SAMPLE_IMAGE = f"{SAVE_PATH}kitty.bmp"
 sample_kernel = kernels.MEAN_KERNEL
-trackbar_type = 'Type: \n 0: Binary \n 1: Binary Inverted \n 2: Truncate \n 3: To Zero \n 4: To Zero Inverted'
-trackbar_value = 'Value'
-max_value = 255
-max_type = 4
-max_binary_value = 255
 threshold_value = 180
 
 
@@ -34,7 +29,7 @@ def open_image(i, filename=None):
 
 
 # part 1 - convolution over a kernel
-def convolution(image=SAMPLE_IMAGE, kernel=sample_kernel, name="untitled", save=False, show=True):
+def convolution(image, kernel=sample_kernel, name="untitled", save=False, show=True):
     new_image = image
     kernel = np.array(kernel)
 
@@ -64,9 +59,11 @@ def convolution(image=SAMPLE_IMAGE, kernel=sample_kernel, name="untitled", save=
                 total = 0
             new_image[(row - padding)][(column - padding)] = total
 
+    # if you want it shown
     if show:
         cv2.namedWindow(name)
         cv2.imshow(name, new_image)
+    # if you want it saved
     if save:
         cv2.imwrite(f"{SAVE_PATH}{name}", new_image)
     return new_image
@@ -91,6 +88,7 @@ def combine(image1, image2):
 
 
 def change(i, experiment, x=0):
+    # when there is a change in trackbar value, this is called
     output = threshold(i, x)
     cv2.imshow(f"experiment{experiment}_threshold_{os.path.basename(image_path)}", output)
     histogram(output, f"{SAVE_PATH}experiment{experiment}_histogram.png")
@@ -112,6 +110,7 @@ def threshold(im, x):
 
 
 def sobel(image, experiment=0, mean="mean"):
+    # make image greyscale
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     cv2.imwrite(f"{SAVE_PATH}greyscale_{os.path.basename(image_path)}", image)
 
@@ -120,6 +119,7 @@ def sobel(image, experiment=0, mean="mean"):
                "5x5": kernels.GAUSSIAN_KERNEL_5,
                "7x7": kernels.GAUSSIAN_KERNEL_7
                }
+    # try to add smoothing
     try:
         k = options[mean]
         # smoothing
@@ -150,14 +150,13 @@ def sobel(image, experiment=0, mean="mean"):
     sobel_image = combine(sobel_x, sobel_y)
     cv2.imshow(f"experiment{experiment}_sobel_{os.path.basename(image_path)}", sobel_image)
     cv2.imwrite(f"{SAVE_PATH}experiment{experiment}_sobel_{os.path.basename(image_path)}", sobel_image)
-    # histogram(sobel_image, f"{SAVE_PATH}experiment{experiment}_histogram_{os.path.basename(image_path)}")
 
+    # create trackbar
     cv2.namedWindow(f"experiment{experiment}_threshold_{os.path.basename(image_path)}")
     cv2.createTrackbar('Threshold', f"experiment{experiment}_threshold_{os.path.basename(image_path)}", 80, 255,
                        lambda x: change(x=x, experiment=experiment, i=sobel_image))
     cv2.imshow(f"experiment{experiment}_threshold_{os.path.basename(image_path)}", sobel_image)
     change(i=sobel_image, experiment=experiment, x=80)
-    # cv2.imwrite(f"{SAVE_PATH}experiment{experiment}_threshold_{os.path.basename(image_path)}", sobel_image)
     return sobel_image
 
 
