@@ -97,6 +97,12 @@ def harrisPointsDetector(image):
     trace = gradients[0] + gradients[1]
 
     harris_response = determinant - 0.05 * trace ** 2
+    # print(np.max(Ixx))
+    # print(np.max(Iyy))
+    # print(np.max(Ixy))
+    print(np.max(determinant))
+    print(np.max(trace))
+    print(np.max(harris_response))
 
     corners = np.copy(image)
     edges = np.copy(image)
