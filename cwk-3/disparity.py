@@ -5,20 +5,19 @@ from mpl_toolkits import mplot3d
 from matplotlib import pyplot as plt
 
 
-
 # ================================================
 #
 def getDisparityMap(imL, imR, numDisparities, blockSize):
     stereo = cv2.StereoBM_create(numDisparities=numDisparities, blockSize=blockSize)
 
     disparity = stereo.compute(imL, imR)
-    disparity = disparity - disparity.min() + 1 # Add 1 so we don't get a zero depth, later
-    disparity = disparity.astype(np.float32) / 16.0 # Map is fixed point int with 4 fractional bits
+    disparity = disparity - disparity.min() + 1  # Add 1 so we don't get a zero depth, later
+    disparity = disparity.astype(np.float32) / 16.0  # Map is fixed point int with 4 fractional bits
 
-    return disparity # floating point image
+    return disparity  # floating point image
+
+
 # ================================================
-
-
 
 
 # ================================================
@@ -31,12 +30,12 @@ def plot(disparity):
     z = []
     for r in range(4):
         for c in range(4):
-                x += [c]
-                y += [r]
-                z += [r*c]
+            x += [c]
+            y += [r]
+            z += [r * c]
 
     # Plt depths
-    ax = plt.axes(projection ='3d')
+    ax = plt.axes(projection='3d')
     ax.scatter(x, y, z, 'green')
 
     # Labels
@@ -44,7 +43,7 @@ def plot(disparity):
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 
-    plt.savefig('myplot.pdf', bbox_inches='tight') # Can also specify an image, e.g. myplot.png
+    plt.savefig('myplot.pdf', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
     plt.show()
 
 
@@ -60,7 +59,6 @@ if __name__ == '__main__':
         print('\nError: failed to open {}.\n'.format(filename))
         sys.exit()
 
-
     # Load right image
     filename = 'img/input/umbrellaR.png'
     imgR = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
@@ -68,7 +66,6 @@ if __name__ == '__main__':
     if imgR is None:
         print('\nError: failed to open {}.\n'.format(filename))
         sys.exit()
-
 
     # Create a window to display the image in
     cv2.namedWindow('Disparity', cv2.WINDOW_NORMAL)
