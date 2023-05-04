@@ -56,7 +56,7 @@ def open_image(i=None):
 
 
 def getDisparity():
-    global disparityNormalised
+    global disparityNormalised, disparity_img
     canny_images = [cv2.Canny(i, canny_vals[0], canny_vals[1]) for i in images]
     disparity_img = disparity.getDisparityMap(canny_images[0], canny_images[1], 64, 5)
     disparityNormalised = np.interp(disparity_img, (disparity_img.min(), disparity_img.max()), (0.0, 1.0))
@@ -89,6 +89,7 @@ print(f"focal length "
 # DISPARITY MAP
 cv2.imshow(f"Disparity", images[0])
 disparityNormalised = []
+disparity_img = []
 cv2.createTrackbar('Canny1', 'Disparity', canny_vals[0], 255, change1)
 cv2.createTrackbar('Canny2', 'Disparity', canny_vals[1], 255, change2)
 
@@ -100,11 +101,11 @@ image_depth = np.zeros_like(disparityNormalised)
 
 # calculate Z value for each coordinate
 coordinates = []
-for i, row in enumerate(disparityNormalised):
+for i, row in enumerate(disparity_img):
     for j, column in enumerate(row):
-        if disparityNormalised[i][j] > 0.5:
-            x = (disparityNormalised[i][j]/focal_length) * i
-            coordinates.append((x, j, disparityNormalised[i][j]))
+        if disparityNormalised[i][j] > 0:
+            x = (column/focal_length) * i
+            coordinates.append((x, j, column))
         # image_depth[i][j] = baseline * (focal_length / (disparityNormalised[i][j] + doffs))
 
 # Calculate world co-ordinates using similar triangles
