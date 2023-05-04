@@ -28,23 +28,37 @@ def plot(disparity):
     x = []
     y = []
     z = []
-    for r in range(4):
-        for c in range(4):
-            x += [c]
-            y += [r]
-            z += [r * c]
+    print("plotting disparity")
+    for index, val in enumerate(disparity):
+        x += [val[0]]
+        y += [val[1]]
+        z += [val[2]]
+
+    # for r in range(4):
+    #     for c in range(4):
+    #         x += [c]
+    #         y += [r]
+    #         z += [r * c]
 
     # Plt depths
     ax = plt.axes(projection='3d')
-    ax.scatter(x, y, z, 'green')
+    ax.scatter(x, y, z, 'green', s=1)
 
     # Labels
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
 
-    plt.savefig('myplot.pdf', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
+    ax.view_init(20, 120)
+    plt.savefig('./img/output/3D_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
     plt.show()
+    # ax.view_init(0, 90)
+    # plt.savefig('./img/output/xz_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
+    # plt.show()
+    # ax.view_init(0, -180)
+    # plt.savefig('./img/output/yz_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
+    # plt.show()
+    print("disparity plotted")
 
 
 # ================================================

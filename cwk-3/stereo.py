@@ -99,11 +99,18 @@ pause()
 image_depth = np.zeros_like(disparityNormalised)
 
 # calculate Z value for each coordinate
+coordinates = []
 for i, row in enumerate(disparityNormalised):
     for j, column in enumerate(row):
-        image_depth[i][j] = baseline*(focal_length/(disparityNormalised[i][j] + doffs))
+        if disparityNormalised[i][j] > 0.5:
+            x = (disparityNormalised[i][j]/focal_length) * i
+            coordinates.append((x, j, disparityNormalised[i][j]))
+        # image_depth[i][j] = baseline * (focal_length / (disparityNormalised[i][j] + doffs))
 
 # Calculate world co-ordinates using similar triangles
+# x = (depth/focus) * X0
+
 
 # Plot disparity
-disparity.plot(disparityNormalised)
+# print(coordinates)
+disparity.plot(coordinates)
