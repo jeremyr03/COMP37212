@@ -42,20 +42,21 @@ def plot(disparity):
 
     # Plt depths
     ax = plt.axes(projection='3d')
-    ax.scatter(x, y, z, 'green', s=1)
+    ax.scatter(x, z, y, c='green', s=0.2)
 
     # Labels
     ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax.set_ylabel('z')
+    ax.set_zlabel('y')
 
-    ax.view_init(20, 120)
-    plt.savefig('./img/output/3D_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
-    plt.show()
-    # ax.view_init(0, 90)
-    # plt.savefig('./img/output/xz_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
+    # ax.view_init(vertical_axis="y", roll=0, elev=20, azim=-40)
+    # ax.view_init(30, 170, vertical_axis='y')
+    # plt.savefig('./img/output/3D_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
     # plt.show()
-    # ax.view_init(0, -180)
+    ax.view_init(90, -90)
+    plt.savefig('./img/output/xz_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
+    plt.show()
+    # ax.view_init(0, 180)
     # plt.savefig('./img/output/yz_view.png', bbox_inches='tight')  # Can also specify an image, e.g. myplot.png
     # plt.show()
     print("disparity plotted")
